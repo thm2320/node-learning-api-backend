@@ -1,3 +1,5 @@
+const path = require('path');
+
 const express = require('express');
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
@@ -9,6 +11,7 @@ const app = express();
 
 //app.use(bodyParser.urlencoded()); //x-www-form-urlencoded
 app.use(bodyParser.json()); //applcation/json
+app.use('/images', express.static(path.join(__dirname, 'images')))
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*' /* '*' for any domain, can set the domain defined */);
@@ -18,6 +21,15 @@ app.use((req, res, next) => {
 });
 
 app.use('/feed', feedRoutes);
+
+app.use((err, req, res, next) => {
+  console.log(err);
+  const status = err.statusCode || 500;
+  const message = err.message;
+  res.status(status).json({
+    message
+  });
+});
 
 mongoose
   .connect(MONGODB_URI)
