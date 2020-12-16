@@ -82,3 +82,31 @@ exports.login = (req, res, next) => {
       next(err)
     })
 }
+
+exports.getUserStatus = (req, res, next) => {
+  const userId = req.userId
+  User.findById(userId)
+    .then(user => {
+      res.status(200)
+        .json({
+          status: user.status
+        })
+    })
+}
+
+exports.updateUserStatus = (req, res, next) => {
+  const userId = req.userId
+  const newStatus = req.body.status
+  User.findById(userId)
+    .then(user => {
+      user.status = newStatus;
+      return user.save()
+
+    })
+    .then(result => {
+      res.status(200)
+        .json({
+          message: 'User status updated'
+        })
+    })
+}
