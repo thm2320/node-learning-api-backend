@@ -48,10 +48,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/graphql', graphqlHTTP({
-  schema: graphqlSchema,
-  rootValue: graphqlResolver
-}))
+app.use('/graphql',
+  graphqlHTTP({
+    schema: graphqlSchema,
+    rootValue: graphqlResolver,
+    graphiql: true
+  })
+)
 
 app.use((err, req, res, next) => {
   console.log(err);
